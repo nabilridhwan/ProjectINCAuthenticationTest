@@ -8,6 +8,8 @@ const helmet = require("helmet");
 
 const authRoutes = require("./routers/auth");
 const adminAuthRoutes = require("./routers/admin/auth");
+const devAuthRoutes = require("./routers/dev/auth");
+
 const users = require("./utils/usersSimulation");
 
 require("dotenv").config();
@@ -17,12 +19,16 @@ app.use(cookieParser(process.env.COOKIE_SECRET || "secret"));
 app.use(express.urlencoded({ extended: true, limit: "1kb" }));
 app.use(express.json({ limit: "1kb" }));
 
+// Prevents HTTP parameter pollution
 app.use(hpp());
 app.use(helmet());
+
+// Hides the X-Powered-By header
 app.use(helmet.hidePoweredBy());
 
 app.use("/auth", authRoutes);
 app.use("/admin/auth", adminAuthRoutes);
+app.use("/dev/auth", devAuthRoutes);
 
 // Error handler
 app.use((error, req, res, next) => {

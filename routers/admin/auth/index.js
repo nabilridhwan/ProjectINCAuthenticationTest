@@ -3,7 +3,7 @@ const createError = require("http-errors");
 const Admin = require("../../../classes/Admin");
 const Staff = require("../../../classes/Staff");
 const router = express.Router();
-const jwt = require("../../../utils/jsonwebtoken");
+const jwtRegisterUser = require("../../../utils/jwtRegisteringUser");
 const { checkIfExists, addUser } = require("../../../utils/usersUtils");
 
 // This route allows for the admin to add a user and assign a name and email to the user. The user then receives an email to activate their account.
@@ -43,9 +43,9 @@ router.post("/register", (req, res, next) => {
         addUser(user);
 
         // Generate jwt that expires in 1 hour
-        const accessToken = jwt.generate(user.getSafeObject());
+        const accessToken = jwtRegisterUser.generate(user.getSafeObject());
 
-        const messageToSendToUser = `You are required to register your account by clicking the link below.\nhttp://localhost:3000/auth/activate?accessToken=${accessToken}. The link will expire in 1 hour.`;
+        const messageToSendToUser = `You are required to register your account by clicking the link below.\n\nhttp://localhost:3000/auth/activate?accessToken=${accessToken}.\n\nThe link will expire in 1 hour.`;
 
         console.log(messageToSendToUser);
 

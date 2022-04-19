@@ -6,6 +6,7 @@
 2.  Set up the .env file with 3 environment variables:
     -   `COOKIE_SECRET`: The secret for cookies.
     -   `JWT_SECRET`: JSON Web Token secret (used for verification of the JWT).
+    -   `JWT_SECRET_REGISTERING_USER`: JSON Web Token secret (used for verification of the JWT when registering a user).
     -   `PORT`: The port that the server will run on (by default, if omitted, is 3000).
 3.  Run the server using `node index.js`.
 

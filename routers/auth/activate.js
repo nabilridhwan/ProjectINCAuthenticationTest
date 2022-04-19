@@ -1,7 +1,7 @@
 const express = require("express");
 const createError = require("http-errors");
 const router = express.Router();
-const jwt = require("../../utils/jsonwebtoken");
+const jwtRegisterUser = require("../../utils/jwtRegisteringUser");
 const { findUserByEmail, editUserDetails } = require("../../utils/usersUtils");
 
 router.post("/", async (req, res, next) => {
@@ -13,10 +13,8 @@ router.post("/", async (req, res, next) => {
     const { accessToken } = req.query;
     const { password } = req.body;
 
-    console.log(accessToken);
-
     try {
-        let decodedData = await jwt.verify(accessToken);
+        let decodedData = await jwtRegisterUser.verify(accessToken);
 
         // Get the email from decodedData
         const { email } = decodedData;

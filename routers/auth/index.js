@@ -2,9 +2,8 @@ const express = require("express");
 const createError = require("http-errors");
 const Admin = require("../../classes/Admin");
 const Staff = require("../../classes/Staff");
-const User = require("../../classes/User");
 const router = express.Router();
-const jwt = require("../../utils/jsonwebtoken");
+const jwt = require("../../utils/jwt");
 const { checkIfExists, addUser } = require("../../utils/usersUtils");
 
 const activate = require("./activate");

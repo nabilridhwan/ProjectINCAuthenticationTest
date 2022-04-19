@@ -30,3 +30,7 @@ The link will expire in 1 hour.
 -   POST `/auth/activate?accessToken=<accessToken>`
     -   Clicking on the link in the "email simulation" will redirect the user to this exact endpoint (with the accessToken as a query parameter). **BUT** its a GET request.
     -   Requires `password` as part of the request body.
+-   GET `/dev/auth`
+    -   Returns the user data without the password (as part of development)
+    -   Requires accessToken as part of its request body and "type" as a query parameter.
+        -   "type" accepts "normal" or "register" to alternate between access token got from normal route or register route.
