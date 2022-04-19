@@ -7,6 +7,8 @@ const hpp = require("hpp");
 const helmet = require("helmet");
 
 const authRoutes = require("./routers/auth");
+const adminAuthRoutes = require("./routers/admin/auth");
+const users = require("./utils/usersSimulation");
 
 require("dotenv").config();
 
@@ -20,10 +22,11 @@ app.use(helmet());
 app.use(helmet.hidePoweredBy());
 
 app.use("/auth", authRoutes);
+app.use("/admin/auth", adminAuthRoutes);
 
 // Error handler
 app.use((error, req, res, next) => {
-    console.log(error);
+    // console.error(error);
 
     if (error instanceof HttpError) {
         res.status(error.statusCode).json({
@@ -37,6 +40,13 @@ app.use((error, req, res, next) => {
         });
     }
 
+    next();
+});
+
+// This middleware shows the users at every step of the process in table form
+app.use((req, res, next) => {
+    console.log("Request from " + req.route);
+    console.table(users);
     next();
 });
 

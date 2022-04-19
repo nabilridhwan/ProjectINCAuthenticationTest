@@ -7,6 +7,11 @@ const router = express.Router();
 const jwt = require("../../utils/jsonwebtoken");
 const { checkIfExists, addUser } = require("../../utils/usersUtils");
 
+const activate = require("./activate");
+
+// Route for activate
+router.use("/activate", activate);
+
 router.post("/login", async (req, res, next) => {
     // await jwt.generate()
 
@@ -53,7 +58,6 @@ router.post("/signup", (req, res, next) => {
         user = new Staff(userID, username, name, email, password, age);
     }
 
-    // TODO: Something goes wrong when recreating a new user with different username/email. It still returns the error below.
     if (checkIfExists(user)) {
         next(
             createError(400, "User already exists with the username or email")

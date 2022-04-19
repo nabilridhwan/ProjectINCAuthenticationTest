@@ -9,6 +9,8 @@
     -   `PORT`: The port that the server will run on (by default, if omitted, is 3000).
 3.  Run the server using `node index.js`.
 
+> Read more about "Registering account on behalf of a user" [here](./docs/RegisterAccount).
+
 ## Note - Users Simulation
 
 Since we do not have a database to query, we simulate the users using 2 files.
