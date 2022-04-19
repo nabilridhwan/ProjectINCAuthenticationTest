@@ -16,7 +16,7 @@ Since we do not have a database to query, we simulate the users using 2 files.
 -   `usersSimulation.js`
     -   This contains just one line which is an empty array and returns the array.
 -   `usersUtils.js`
-    -   This contains utilities that interact with the files above such as `checkIfExists()` and `addUser()`.
+    -   This contains utilities that interact with the file above such as `checkIfExists()` and `addUser()`.
 
 With that in mind, note that every re-run of the application, the user array will be empty :).
 
@@ -24,25 +24,36 @@ With that in mind, note that every re-run of the application, the user array wil
 
 -   `/auth/signup`
 
-    -   Requires the body to have userID, username, name, email, password and age as part of the request.
+    -   Body request format:
+
+        ```json
+        "userID": "int",
+        "username": "string",
+        "name": "string",
+        "email": "string",
+        "password": "string"
+        "age": "int"
+        ```
+
     -   If user exists
         -   It returns a 400 error
     -   If there are some missing fields
         -   It returns a 400 error
     -   If successful
         -   It returns a 200 status code
-        -   It sets the cookie with the JWT.
+        -   It sets the cookie with the JWT which is httpOnly.
 
 -   `/auth/login`
     -   Do this if the cookie is set (i.e. You have created a new user from the endpoint above)
+    -   It should return the user data without the password.
 -   `/auth/logout`
     -   Removes the cookie. (i.e. Logs the user out)
 
 ## Error handling
 
-All error handling is handled by calling the next() function and passing a new instance of `HttpError` from the package `http-errors`.
+All error handling is handled by calling the `next()` function and passing a new instance of `HttpError` from the package `http-errors`.
 
-The middleware it calls is in `index.js`
+The "next" middleware it calls is in `index.js` and it is the last middleware in the chain.
 
 ## Explanation of directories
 
