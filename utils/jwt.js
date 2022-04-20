@@ -9,3 +9,14 @@ module.exports.generate = (payload) => {
 module.exports.verify = (token) => {
     return jwt.verify(token, process.env.JWT_SECRET);
 };
+
+module.exports.generateRegisteringUser = (payload) => {
+    return jwt.sign(payload, process.env.JWT_SECRET_REGISTERING_USER, {
+        expiresIn: "1h",
+    });
+};
+
+// Returns a promise with the decoded payload otherwise it will return an error.
+module.exports.verifyRegisteringUser = (token) => {
+    return jwt.verify(token, process.env.JWT_SECRET_REGISTERING_USER);
+};
