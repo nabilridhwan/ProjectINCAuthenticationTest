@@ -14,7 +14,7 @@ const User = {
         ]);
     },
 
-    editUserDetailsByEmail: async (
+    updateUserByEmail: async (
         username,
         email,
         password,
