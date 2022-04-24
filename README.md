@@ -3,25 +3,10 @@
 ## Setup
 
 1.  Run `npm install` in the root directory to install the dependencies.
-2.  Set up the .env file with 3 environment variables:
-    -   `COOKIE_SECRET`: The secret for cookies.
-    -   `JWT_SECRET`: JSON Web Token secret (used for verification of the JWT).
-    -   `JWT_SECRET_REGISTERING_USER`: JSON Web Token secret (used for verification of the JWT when registering a user).
-    -   `PORT`: The port that the server will run on (by default, if omitted, is 3000).
+2.  Copy the `.env.sample` file and rename it to `.env` and fill up the missing values.
 3.  Run the server using `node index.js`.
 
 > Read more about "Registering account on behalf of a user" [here](./docs/RegisterAccount).
-
-## Note - Users Simulation
-
-Since we do not have a database to query, we simulate the users using 2 files.
-
--   `usersSimulation.js`
-    -   This contains just one line which is an empty array and returns the array.
--   `usersUtils.js`
-    -   This contains utilities that interact with the file above such as `checkIfExists()` and `addUser()`.
-
-With that in mind, note that every re-run of the application, the user array will be empty :).
 
 ## Endpoints to test
 
