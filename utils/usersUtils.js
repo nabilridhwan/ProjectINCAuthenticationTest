@@ -2,6 +2,8 @@ const User = require("../classes/User");
 const users = require("./usersSimulation");
 
 module.exports.checkIfExists = (user) => {
+    console.table(users);
+
     if (user instanceof User) {
         const filteredUsers = users.some(
             (u) => u.email === user.email || u.username === user.username
@@ -17,4 +19,14 @@ module.exports.checkIfExists = (user) => {
 
 module.exports.addUser = (user) => {
     users.push(user);
+};
+
+module.exports.findUserByEmail = (email) => {
+    return users.filter((u) => u.email === email);
+};
+
+module.exports.editUserDetails = (user) => {
+    // Find the index of the user by email
+    const index = users.findIndex((u) => u.email === user.email);
+    users[index] = user;
 };
