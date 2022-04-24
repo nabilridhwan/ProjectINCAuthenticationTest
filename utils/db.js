@@ -1,7 +1,8 @@
 const { Pool } = require("pg");
+const CONFIG = require("./config");
 
 const pool = new Pool({
-    connectionString: process.env.PG_CONNECTION_STRING,
+    connectionString: CONFIG.DB_CONNECTION,
 });
 
 const CONSTRAINTS = {

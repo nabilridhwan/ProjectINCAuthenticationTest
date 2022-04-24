@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const CONFIG = {
+    NODE_ENV: process.env.NODE_ENV || "development",
     PORT: process.env.PORT || 3000,
     DB_CONNECTION: process.env.PG_CONNECTION,
     COOKIE_SECRET: process.env.COOKIE_SECRET,

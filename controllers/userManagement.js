@@ -1,10 +1,5 @@
 const createError = require("http-errors");
-const {
-    checkIfExists,
-    addUser,
-    findUserByEmail,
-    editUserDetails,
-} = require("../model/user");
+const User = require("../model/user");
 const jwt = require("../utils/jwt");
 
 const UserManagement = {

@@ -1,22 +1,28 @@
 {
-  "name": "project-inc-test",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cookie-parser": "^1.4.6",
-    "dotenv": "^16.0.0",
-    "express": "^4.17.3",
-    "helmet": "^5.0.2",
-    "hpp": "^0.2.3",
-    "http-errors": "^2.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "pg": "^8.7.3"
-  }
+    "name": "project-inc-test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "cookie-parser": "^1.4.6",
+        "dotenv": "^16.0.0",
+        "express": "^4.17.3",
+        "helmet": "^5.0.2",
+        "hpp": "^0.2.3",
+        "http-errors": "^2.0.0",
+        "jsonwebtoken": "^8.5.1",
+        "morgan": "^1.10.0",
+        "pg": "^8.7.3"
+    },
+    "devDependencies": {
+        "@faker-js/faker": "^6.2.0",
+        "jest": "^27.5.1",
+        "supertest": "^6.2.2"
+    }
 }
