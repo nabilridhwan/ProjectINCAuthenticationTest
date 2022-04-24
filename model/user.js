@@ -1,49 +1,124 @@
 const { pool } = require("../utils/db");
 
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+
+(async () => {})();
+
 const TABLE_NAME = "public.user";
 const ACCESS_LEVEL_TABLE_NAME = "public.access_level";
 
 const User = {
-    insertUser: async (username, email, password, registered, activated) => {
-        return pool.query(
-            `INSERT INTO ${TABLE_NAME}(username, email, password, registered, activated) VALUES($1, $2, $3, $4, $5) RETURNING userid, username`,
-            [username, email, password, registered, activated]
-        );
+    insertUser: async (username, email, password, privillegeid) => {
+        const data = await prisma.user.create({
+            data: {
+                username: username,
+                email: email,
+                password: password,
+                privillegeid: privillegeid,
+            },
+
+            select: {
+                userid: true,
+                email: true,
+            },
+        });
+
+        return data;
     },
 
     findUserByUserID: async (userID) => {
-        return pool
-            .query(
-                `SELECT * FROM ${TABLE_NAME} INNER JOIN ${ACCESS_LEVEL_TABLE_NAME} ON ${TABLE_NAME}.accessid = ${ACCESS_LEVEL_TABLE_NAME}.accessid WHERE userid = $1`,
-                [userID]
-            )
-            .then((res) => {
-                return res.rows;
-            });
+        const data = await prisma.user.findFirst({
+            where: {
+                userid: {
+                    equals: userID,
+                },
+            },
+
+            select: {
+                userid: true,
+                email: true,
+                privillegeid: true,
+                privillege: {
+                    select: {
+                        description: true,
+                    },
+                },
+            },
+        });
+
+        return data;
     },
 
     findUserByEmail: async (email) => {
-        return pool
-            .query(
-                `SELECT * FROM ${TABLE_NAME} INNER JOIN ${ACCESS_LEVEL_TABLE_NAME} ON ${TABLE_NAME}.accessid = ${ACCESS_LEVEL_TABLE_NAME}.accessid WHERE email = $1`,
-                [email]
-            )
-            .then((res) => {
-                return res.rows;
-            });
+        const data = await prisma.user.findFirst({
+            where: {
+                email: {
+                    equals: email,
+                },
+            },
+
+            select: {
+                userid: true,
+                username: true,
+                email: true,
+                password: true,
+                privillegeid: true,
+                privillege: {
+                    select: {
+                        description: true,
+                    },
+                },
+            },
+        });
+
+        return data;
     },
 
-    updateUserByEmail: async (
-        username,
-        email,
-        password,
-        registered,
-        activated
-    ) => {
-        return pool.query(
-            `UPDATE ${TABLE_NAME} SET username = $1, email = $2, password = $3, registered = $4, activated = $5 WHERE email = $6`,
-            [username, email, password, registered, activated, email]
-        );
+    // TODO: Fix update of user
+    updateUserByEmail: async (inEmail, updatedFields) => {
+        // Get user by email
+        const getUser = await User.findUserByEmail(inEmail);
+
+        if (!getUser) {
+            return false;
+        }
+
+        const { email, password, privillegeid = 1, username } = getUser;
+
+        // Update user
+        const data = await prisma.user.update({
+            where: {
+                email: inEmail,
+            },
+
+            data: {
+                email,
+                password,
+                privillegeid,
+                username,
+                ...updatedFields,
+            },
+
+            select: {
+                userid: true,
+                email: true,
+                username: true,
+                privillegeid: true,
+            },
+        });
+
+        return data;
+    },
+
+    deleteUserByEmail: async (inEmail) => {
+        const data = await prisma.user.delete({
+            where: {
+                email: inEmail,
+            },
+        });
+
+        return data;
     },
 };
 

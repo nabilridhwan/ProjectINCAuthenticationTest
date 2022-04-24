@@ -1,6 +1,7 @@
 const createError = require("http-errors");
 const User = require("../model/user");
 const jwt = require("../utils/jwt");
+const { stringifyUser } = require("../utils/stringifyUser");
 
 const UserManagement = {
     activateAccount: async (req, res, next) => {
@@ -19,24 +20,18 @@ const UserManagement = {
             const { email } = decodedData;
 
             // Find the user from the email
-            let user = findUserByEmail(email);
+            let user = await User.findUserByEmail(email);
 
-            if (user.length === 0) {
+            if (!user) {
                 return next(createError(404, "User does not exist"));
             } else {
                 // User is now index 0
-                user = user[0];
-
-                if (user.registered) {
+                if (user.privillegeid != 1) {
                     return next(createError(400, "User already registered"));
                 }
 
-                // Change the password of the user based on the password from the body
-                user.password = password;
-                user.registered = true;
-
                 // Edit user details
-                editUserDetails(user);
+                User.updateUserByEmail(email, { password, privillegeid: 2 });
                 return res.json({
                     success: true,
                     message: "User registered successfully",
@@ -56,11 +51,8 @@ const UserManagement = {
 
         const { email, password } = req.body;
 
-        User.findUserByEmail(email).then((rows) => {
-            if (!rows || rows.length === 0)
-                return next(createError(404, "User does not exist"));
-
-            let user = rows[0];
+        User.findUserByEmail(email).then((user) => {
+            if (!user) return next(createError(404, "User does not exist"));
 
             // Check the password
             if (user.password !== password) {
@@ -69,9 +61,10 @@ const UserManagement = {
 
             // Delete the password
             delete user.password;
+            delete user.privillege;
 
             // Generate jwt token
-            const token = jwt.generate(user);
+            const token = jwt.generate(stringifyUser(user));
 
             // Set a cookie with maxAge being 1 hour
 

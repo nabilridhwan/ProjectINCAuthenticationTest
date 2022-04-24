@@ -10,7 +10,7 @@ module.exports.isUserAdmin = async (req, res, next) => {
         // If there is cookies, decode the cookie
         const decoded = await jwt.verify(req.cookies.token);
 
-        if (decoded.access_name !== "Admin") {
+        if (decoded.privillegeid !== "3") {
             return next(createHttpErrors(403, "You are not an admin."));
         }
 

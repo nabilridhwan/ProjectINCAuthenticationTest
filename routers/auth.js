@@ -9,7 +9,7 @@ const jwt = require("../utils/jwt");
 
 router.post("/activate", UserManagement.activateAccount);
 router.post("/login", UserManagement.login);
-router.post("/signup", UserManagement.signup);
+// router.post("/signup", UserManagement.signup);
 router.post("/logout", UserManagement.logout);
 
 module.exports = router;
