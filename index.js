@@ -7,8 +7,8 @@ const hpp = require("hpp");
 const helmet = require("helmet");
 
 const authRoutes = require("./routers/auth");
-const adminAuthRoutes = require("./routers/admin/auth");
-const devAuthRoutes = require("./routers/dev/auth");
+const adminAuthRoutes = require("./routers/adminAuth");
+const devAuthRoutes = require("./routers/devAuth");
 
 const users = require("./utils/usersSimulation");
 
