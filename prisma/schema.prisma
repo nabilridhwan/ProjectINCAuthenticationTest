@@ -7,20 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model privillege {
-  privillegeid BigInt  @unique(map: "uq_privillegeid")
-  description  String? @db.VarChar
-  user         user[]
+model Privilege {
+  privilegeid Int
+  description String? @db.VarChar(50)
+  user        User[]
+
+  @@unique([privilegeid])
+  @@index([privilegeid])
 }
 
-model user {
-  userid       BigInt     @id(map: "userid") @default(autoincrement())
-  username     String     @unique(map: "uq_username") @db.VarChar
-  email        String     @unique(map: "uq_email") @db.VarChar
-  password     String     @db.VarChar
-  created_at   DateTime   @default(now())
-  privillegeid BigInt     @default(1)
-  privillege   privillege @relation(fields: [privillegeid], references: [privillegeid], onDelete: SetNull, onUpdate: SetNull, map: "fk_privillegeid")
+model User {
+  userid      Int       @id @default(autoincrement())
+  username    String    @unique @db.VarChar(255)
+  email       String    @unique @db.VarChar(100)
+  password    String    @db.VarChar(100)
+  created_at  DateTime  @default(now())
+  privilegeid Int       @default(1)
+  privilege   Privilege @relation(fields: [privilegeid], references: [privilegeid], onDelete: SetDefault, onUpdate: SetDefault)
 
-  @@index([privillegeid], map: "fki_fk_privillegeid")
+  @@index([userid])
 }

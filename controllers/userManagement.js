@@ -26,12 +26,12 @@ const UserManagement = {
                 return next(createError(404, "User does not exist"));
             } else {
                 // User is now index 0
-                if (user.privillegeid != 1) {
+                if (user.privilege != 1) {
                     return next(createError(400, "User already registered"));
                 }
 
                 // Edit user details
-                User.updateUserByEmail(email, { password, privillegeid: 2 });
+                User.updateUserByEmail(email, { password, privilegeid: 2 });
                 return res.json({
                     success: true,
                     message: "User registered successfully",
@@ -61,7 +61,7 @@ const UserManagement = {
 
             // Delete the password
             delete user.password;
-            delete user.privillege;
+            delete user.privilege;
 
             // Generate jwt token
             const token = jwt.generate(stringifyUser(user));
