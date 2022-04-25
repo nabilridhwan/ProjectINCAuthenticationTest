@@ -2,6 +2,7 @@ const app = require("../app");
 const supertest = require("supertest");
 const request = supertest(app);
 const { faker } = require("@faker-js/faker");
+const { VerifiedAccount } = require("../utils/testAccounts");
 
 describe("Auth Endpoint", () => {
     it("It should return a status code of 400 for missing parameters", async () => {
@@ -23,7 +24,7 @@ describe("Auth Endpoint", () => {
 
     it("It should return a status code of 401 if the password is incorrect", async () => {
         const res = await request.post("/auth/login").send({
-            email: "nabil@test.com",
+            email: VerifiedAccount.email,
             password: faker.internet.password(),
         });
 
@@ -32,8 +33,8 @@ describe("Auth Endpoint", () => {
 
     it("It should log the user in if credentials are correct", async () => {
         const res = await request.post("/auth/login").send({
-            email: "nabil@test.com",
-            password: "password",
+            email: VerifiedAccount.email,
+            password: VerifiedAccount.password,
         });
 
         expect(res.statusCode).toEqual(200);

@@ -5,6 +5,7 @@ const supertest = require("supertest");
 const request = supertest.agent(app);
 const { faker } = require("@faker-js/faker");
 const User = require("../model/user");
+const { VerifiedAccount, AdminAccount } = require("../utils/testAccounts");
 
 describe("Admin Auth Endpoint", () => {
     it("It should return a 401 if user is not logged in", async () => {
@@ -21,8 +22,8 @@ describe("Admin Auth Endpoint", () => {
         await request
             .post("/auth/login")
             .send({
-                email: "non_admin@test.com",
-                password: "password",
+                email: VerifiedAccount.email,
+                password: VerifiedAccount.password,
             })
             .expect(200);
 
@@ -41,11 +42,11 @@ describe("Admin Auth Endpoint", () => {
 
     it("It should return a 200 if the user is successfully registered", async () => {
         // Login as admin
-        await request
+        let loginReq = await request
             .post("/auth/login")
             .send({
-                email: "nabridhwan@gmail.com",
-                password: "12345678",
+                email: AdminAccount.email,
+                password: AdminAccount.password,
             })
             .expect(200);
 
