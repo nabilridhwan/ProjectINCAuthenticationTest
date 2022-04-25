@@ -26,7 +26,7 @@ const UserManagement = {
                 return next(createError(404, "User does not exist"));
             } else {
                 // User is now index 0
-                if (user.privilege != 1) {
+                if (user.privilegeid != 1) {
                     return next(createError(400, "User already registered"));
                 }
 

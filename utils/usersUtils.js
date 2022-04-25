@@ -1,4 +1,3 @@
-const User = require("../classes/User");
 const users = require("./usersSimulation");
 
 module.exports.checkIfExists = (user) => {
