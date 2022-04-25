@@ -20,7 +20,7 @@ const AdminUserManagement = {
                 username,
                 email,
                 password = "",
-                privillegeid = 1,
+                privilegeid = 1,
             } = req.body;
 
             // TODO: Something goes wrong when recreating a new user with different username/email. It still returns the error below.
@@ -29,7 +29,7 @@ const AdminUserManagement = {
                 username,
                 email,
                 password,
-                privillegeid
+                privilegeid
             );
 
             // Generate jwt that expires in 1 hour

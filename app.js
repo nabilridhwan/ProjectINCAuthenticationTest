@@ -15,7 +15,7 @@ const morgan = require("morgan");
 
 app.use(cookieParser(CONFIG.COOKIE_SECRET || "secret"));
 
-if (CONFIG.NODE_ENV === "production") {
+if (CONFIG.NODE_ENV !== "test") {
     app.use(morgan("dev"));
 }
 

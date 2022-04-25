@@ -9,13 +9,13 @@ const TABLE_NAME = "public.user";
 const ACCESS_LEVEL_TABLE_NAME = "public.access_level";
 
 const User = {
-    insertUser: async (username, email, password, privillegeid) => {
+    insertUser: async (username, email, password, privilegeid) => {
         const data = await prisma.user.create({
             data: {
                 username: username,
                 email: email,
                 password: password,
-                privillegeid: privillegeid,
+                privilegeid: privilegeid,
             },
 
             select: {
@@ -38,8 +38,8 @@ const User = {
             select: {
                 userid: true,
                 email: true,
-                privillegeid: true,
-                privillege: {
+                privilegeid: true,
+                privilege: {
                     select: {
                         description: true,
                     },
@@ -63,8 +63,8 @@ const User = {
                 username: true,
                 email: true,
                 password: true,
-                privillegeid: true,
-                privillege: {
+                privilegeid: true,
+                privilege: {
                     select: {
                         description: true,
                     },
@@ -84,7 +84,7 @@ const User = {
             return false;
         }
 
-        const { email, password, privillegeid = 1, username } = getUser;
+        const { email, password, privilegeid = 1, username } = getUser;
 
         // Update user
         const data = await prisma.user.update({
@@ -95,7 +95,7 @@ const User = {
             data: {
                 email,
                 password,
-                privillegeid,
+                privilegeid,
                 username,
                 ...updatedFields,
             },
@@ -104,7 +104,7 @@ const User = {
                 userid: true,
                 email: true,
                 username: true,
-                privillegeid: true,
+                privilegeid: true,
             },
         });
 
