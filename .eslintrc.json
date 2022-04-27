@@ -12,6 +12,8 @@
         "linebreak-style": "off",
         "indent": ["error", 4],
         "quotes": ["error", "double"],
-        "comma-dangle": ["error", "only-multiline"]
+        "comma-dangle": ["error", "only-multiline"],
+        "func-style": ["error", "expression"],
+        "prefer-arrow-callback": "error"
     }
 }
