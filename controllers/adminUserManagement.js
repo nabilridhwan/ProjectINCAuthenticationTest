@@ -1,11 +1,11 @@
 const jwt = require("../utils/jwt");
-const { checkIfExists, addUser } = require("../utils/usersUtils");
 const createError = require("http-errors");
 
 const User = require("../model/user");
 const { CONSTRAINTS } = require("../utils/db");
-const { stringifyUser } = require("../utils/stringifyUser");
 const sendMail = require("../utils/sendMail");
+const { v4: uuidv4 } = require("uuid");
+const Verification = require("../model/verification");
 
 const AdminUserManagement = {
     register: async (req, res, next) => {
@@ -31,12 +31,11 @@ const AdminUserManagement = {
                 privilegeid
             );
 
-            // Generate jwt that expires in 1 hour
-            const accessToken = jwt.generateRegisteringUser(
-                stringifyUser(user)
-            );
+            // Insert a verification token into the database
+            const guidToken = uuidv4();
+            await Verification.insertVerification(user.userid, guidToken);
 
-            const messageToSendToUser = `You are required to register your account by clicking the link below.\n\nhttp://localhost:3000/auth/activate?accessToken=${accessToken}.\n\nThe link will expire in 1 hour.`;
+            const messageToSendToUser = `You are required to register your account by clicking the link below.\n\nhttp://localhost:3000/auth/activate/${guidToken}.\n\nThe link will expire in 1 hour.`;
 
             await sendMail(
                 email,
@@ -54,7 +53,7 @@ const AdminUserManagement = {
                     </strong>
                 </p>
 
-                <code>http://localhost:3000/auth/activate?accessToken=${accessToken}</code>
+                <code>http://localhost:3000/auth/activate/${guidToken}</code>
 
             `
             );
