@@ -33,35 +33,35 @@ const UserManagement = {
             const { userid } = data;
 
             // Find the user from the user id
-            let user = await User.findUserByUserID(userid);
+            const user = await User.findUserByUserID(userid);
 
             if (!user) {
                 return next(createError(404, "User does not exist"));
-            } else {
-                if (user.privilegeid != 1) {
-                    return next(createError(400, "User already registered"));
-                }
-
-                // Encrypt the password
-                password = await Passwords.hashPassword(password);
-
-                // Edit user details
-                await User.updateUserByUserID(userid, {
-                    password,
-                    privilegeid: 2,
-                });
-                // Delete the verifcation
-                await Verification.deleteVerification(data.verification_id);
-
-                return res.json({
-                    success: true,
-                    message: "User registered successfully",
-                });
             }
+
+            if (user.privilegeid !== "1") {
+                return next(createError(400, "User already registered"));
+            }
+
+            // Encrypt the password
+            password = await Passwords.hashPassword(password);
+
+            // Edit user details
+            await User.updateUserByUserID(userid, {
+                password,
+                privilegeid: 2,
+            });
+            // Delete the verifcation
+            await Verification.deleteVerification(data.verification_id);
+
+            return res.json({
+                success: true,
+                message: "User registered successfully",
+            });
 
             // return res.json(decodedData);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             return next(createError(400, "Invalid token"));
         }
     },
@@ -87,7 +87,7 @@ const UserManagement = {
             // If password is invalid, return error
             if (!isPasswordValid) next(createError(401, "Invalid password"));
 
-            // Delete the password
+            // Delete the password and privilege
             delete user.password;
             delete user.privilege;
 
@@ -106,39 +106,39 @@ const UserManagement = {
                 message: "User logged in successfully",
             });
         } catch (error) {
-            console.log(error);
-            next(createError(500, error));
+            // console.log(error);
+            return next(createError(500, error));
         }
     },
 
-    logout: (req, res, next) => {
+    logout: (req, res) => {
         res.clearCookie("token");
         return res.json({ success: true });
     },
 
-    getUserDetails: async (req, res, next) => {
-        if (!req.body.accessToken || !req.query.type) {
-            next(createError(400, "Missing required fields"));
-        }
+    // getUserDetails: async (req, res, next) => {
+    //     if (!req.body.accessToken || !req.query.type) {
+    //         next(createError(400, 'Missing required fields'));
+    //     }
 
-        // Get the token in the query and decode the data
-        const { accessToken } = req.body;
-        const { type } = req.query;
+    //     // Get the token in the query and decode the data
+    //     const { accessToken } = req.body;
+    //     const { type } = req.query;
 
-        try {
-            let decodedData;
+    //     try {
+    //         let decodedData;
 
-            if (type === "register") {
-                decodedData = await jwtRegisterUser.verify(accessToken);
-            } else {
-                decodedData = await jwt.verify(accessToken);
-            }
+    //         if (type === 'register') {
+    //             decodedData = await jwtRegisterUser.verify(accessToken);
+    //         } else {
+    //             decodedData = await jwt.verify(accessToken);
+    //         }
 
-            return res.json(decodedData);
-        } catch (error) {
-            return next(createError(400, `Invalid token for ${type}`));
-        }
-    },
+    //         return res.json(decodedData);
+    //     } catch (error) {
+    //         return next(createError(400, `Invalid token for ${type}`));
+    //     }
+    // },
 };
 
 module.exports = UserManagement;
