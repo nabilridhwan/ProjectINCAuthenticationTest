@@ -61,7 +61,7 @@ const AdminUserManagement = {
 
             console.log(`Sent mail to ${email}`);
 
-            // console.log(messageToSendToUser);
+            console.log(messageToSendToUser);
 
             // Generate a token in jwt
             return res.json({
@@ -69,9 +69,13 @@ const AdminUserManagement = {
                 message: "Successfully created user! Sent link with more info.",
             });
         } catch (error) {
+            console.error(error);
+
             if (error.code === "P2002") {
                 return next(createError(400, "User already exists"));
             }
+
+            return next(createError(500, "Something went wrong"));
         }
     },
 };

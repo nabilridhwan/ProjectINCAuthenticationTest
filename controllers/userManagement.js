@@ -3,6 +3,8 @@ const User = require("../model/user");
 const jwt = require("../utils/jwt");
 const { stringifyUser } = require("../utils/stringifyUser");
 
+const Passwords = require("../utils/passwords");
+
 const UserManagement = {
     activateAccount: async (req, res, next) => {
         if (!req.query.accessToken || !req.body.password) {
@@ -11,7 +13,7 @@ const UserManagement = {
 
         // Get the token in the query and decode the data
         const { accessToken } = req.query;
-        const { password } = req.body;
+        let { password } = req.body;
 
         try {
             let decodedData = await jwt.verifyRegisteringUser(accessToken);
@@ -25,10 +27,12 @@ const UserManagement = {
             if (!user) {
                 return next(createError(404, "User does not exist"));
             } else {
-                // User is now index 0
                 if (user.privilegeid != 1) {
                     return next(createError(400, "User already registered"));
                 }
+
+                // Encrypt the password
+                password = await Passwords.hashPassword(password);
 
                 // Edit user details
                 User.updateUserByEmail(email, { password, privilegeid: 2 });
@@ -45,19 +49,25 @@ const UserManagement = {
     },
 
     login: async (req, res, next) => {
-        if (!req.body.email || !req.body.password) {
-            return next(createError(400, "Missing required fields"));
-        }
+        try {
+            if (!req.body.email || !req.body.password) {
+                return next(createError(400, "Missing required fields"));
+            }
 
-        const { email, password } = req.body;
+            const { email, password } = req.body;
 
-        User.findUserByEmail(email).then((user) => {
+            const user = await User.findUserByEmail(email);
+
             if (!user) return next(createError(404, "User does not exist"));
 
             // Check the password
-            if (user.password !== password) {
-                return next(createError(401, "Invalid password"));
-            }
+            const isPasswordValid = await Passwords.comparePassword(
+                password,
+                user.password
+            );
+
+            // If password is invalid, return error
+            if (!isPasswordValid) next(createError(401, "Invalid password"));
 
             // Delete the password
             delete user.password;
@@ -67,7 +77,6 @@ const UserManagement = {
             const token = jwt.generate(stringifyUser(user));
 
             // Set a cookie with maxAge being 1 hour
-
             res.cookie("token", token, {
                 httpOnly: true,
                 maxAge: 1000 * 60 * 60,
@@ -78,7 +87,10 @@ const UserManagement = {
                 success: true,
                 message: "User logged in successfully",
             });
-        });
+        } catch (error) {
+            console.log(error);
+            next(createError(500, error));
+        }
     },
     signup: (req, res, next) => {
         if (
