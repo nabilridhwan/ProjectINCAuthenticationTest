@@ -25,5 +25,15 @@ model User {
   privilegeid Int       @default(1)
   privilege   Privilege @relation(fields: [privilegeid], references: [privilegeid], onDelete: SetDefault, onUpdate: SetDefault)
 
+  Verification Verification[]
   @@index([userid])
+}
+
+model Verification {
+  verification_id Int      @id @default(autoincrement())
+  userid          Int
+  user            User     @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: Cascade)
+  guid            String   @unique @db.VarChar(255)
+  created_at      DateTime @default(now())
+  expires_in      DateTime
 }
