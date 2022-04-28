@@ -15,9 +15,9 @@ const sendMail = async (to, subject, text, html) => {
         html,
     };
 
-    await sgMail.send(msg);
+    const data = await sgMail.send(msg);
 
-    return true;
+    return data;
 };
 
 module.exports = sendMail;

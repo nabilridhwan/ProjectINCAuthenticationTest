@@ -1,5 +1,6 @@
 const express = require("express");
 const UserManagement = require("../controllers/userManagement");
+
 const router = express.Router();
 
 router.post("/activate/:guid", UserManagement.activateAccount);

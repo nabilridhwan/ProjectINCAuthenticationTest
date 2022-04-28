@@ -20,7 +20,7 @@ model User {
   userid      Int       @id @default(autoincrement())
   username    String    @unique @db.VarChar(255)
   email       String    @unique @db.VarChar(100)
-  password    String    @db.VarChar(100)
+  password    String?   @db.VarChar(100)
   created_at  DateTime  @default(now())
   privilegeid Int       @default(1)
   privilege   Privilege @relation(fields: [privilegeid], references: [privilegeid], onDelete: SetDefault, onUpdate: SetDefault)

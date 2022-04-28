@@ -1,4 +1,4 @@
-/* 
+/*
     The point of this file is to supply credentials for the admin and verified account user
 */
 

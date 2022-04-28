@@ -1,10 +1,8 @@
-const jwt = require("../utils/jwt");
 const createError = require("http-errors");
+const { v4: uuidv4 } = require("uuid");
 
 const User = require("../model/user");
-const { CONSTRAINTS } = require("../utils/db");
 const sendMail = require("../utils/sendMail");
-const { v4: uuidv4 } = require("uuid");
 const Verification = require("../model/verification");
 
 const AdminUserManagement = {
@@ -15,21 +13,9 @@ const AdminUserManagement = {
             }
 
             // Get the user data from the body
-            const {
-                username,
-                email,
-                password = "",
-                privilegeid = 1,
-            } = req.body;
+            const { username, email, privilegeid = 1 } = req.body;
 
-            // TODO: Something goes wrong when recreating a new user with different username/email. It still returns the error below.
-
-            const user = await User.insertUser(
-                username,
-                email,
-                password,
-                privilegeid
-            );
+            const user = await User.insertUser(username, email, privilegeid);
 
             // Insert a verification token into the database
             const guidToken = uuidv4();
@@ -74,6 +60,19 @@ const AdminUserManagement = {
                 return next(createError(400, "User already exists"));
             }
 
+            return next(createError(500, "Something went wrong"));
+        }
+    },
+
+    getUsers: async (req, res, next) => {
+        try {
+            const users = await User.getAllUsers();
+
+            return res.json({
+                success: true,
+                data: users,
+            });
+        } catch (error) {
             return next(createError(500, "Something went wrong"));
         }
     },

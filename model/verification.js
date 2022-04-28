@@ -1,21 +1,26 @@
 const { PrismaClient } = require("@prisma/client");
+
 const prisma = new PrismaClient();
 
 const Verification = {
+    // Add new verification
     insertVerification: async (userid, guid) => {
         // Date which is one hour from now
         const date = new Date();
         date.setHours(date.getHours() + 1);
 
-        return await prisma.verification.create({
+        const create = await prisma.verification.create({
             data: {
-                userid: userid,
-                guid: guid,
+                userid,
+                guid,
                 expires_in: date,
             },
         });
+
+        return create;
     },
 
+    // Find verification by guid
     findUserByGuid: async (guid) => {
         const data = await prisma.verification.findFirst({
             where: {
@@ -34,12 +39,15 @@ const Verification = {
         return data;
     },
 
+    // Delete verification
     deleteVerification: async (verification_id) => {
-        return await prisma.verification.delete({
+        await prisma.verification.delete({
             where: {
-                verification_id: verification_id,
+                verification_id,
             },
         });
+
+        return true;
     },
 };
 

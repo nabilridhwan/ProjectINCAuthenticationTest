@@ -1,5 +1,5 @@
-const jwt = require("../utils/jwt");
 const createHttpErrors = require("http-errors");
+const jwt = require("../utils/jwt");
 
 module.exports.isUserAdmin = async (req, res, next) => {
     if (!req.cookies || !req.cookies.token) {
@@ -7,16 +7,17 @@ module.exports.isUserAdmin = async (req, res, next) => {
     }
 
     try {
-        // If there is cookies, decode the cookie
+        // If there is cookies, decode the token
         const decoded = await jwt.verify(req.cookies.token);
 
+        // Check if the current user has a privilege of admin
         if (decoded.privilegeid !== 3) {
             return next(createHttpErrors(403, "You are not an admin."));
         }
 
-        next();
+        // Go to the next middleware
+        return next();
     } catch (error) {
-        console.log(error);
         return next(createHttpErrors(401, "You are not logged in."));
     }
 };

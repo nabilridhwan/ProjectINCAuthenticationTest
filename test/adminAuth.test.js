@@ -1,10 +1,11 @@
-const app = require("../app");
 const supertest = require("supertest");
 
 // Use agent to persist cookies
-const request = supertest.agent(app);
 const { faker } = require("@faker-js/faker");
+const app = require("../app");
 const User = require("../model/user");
+
+const request = supertest.agent(app);
 const { VerifiedAccount, AdminAccount } = require("../utils/testAccounts");
 
 describe("Admin Auth Endpoint", () => {
