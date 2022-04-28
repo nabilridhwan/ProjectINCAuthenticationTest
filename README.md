@@ -1,12 +1,14 @@
 # Authentication Test
 
+> Read the API documentation [here](https://documenter.getpostman.com/view/18153423/UyrEhaV6)
+
 ## Setup
 
 1.  Run `npm install` in the root directory to install the dependencies.
 2.  Copy the `.env.sample` file and rename it to `.env` and fill up the missing values.
 3.  Run the server using `node index.js`.
-
-> Read more about "Registering account on behalf of a user" [here](./docs/RegisterAccount).
+4.  Make sure you migrated the database using Prisma.
+5.  Read the API Docs to get started.
 
 ## Error handling
 
