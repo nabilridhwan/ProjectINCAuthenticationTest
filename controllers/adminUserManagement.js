@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const { v4: uuidv4 } = require("uuid");
+const validator = require("validator");
 
 const User = require("../model/user");
 const sendMail = require("../utils/sendMail");
@@ -14,6 +15,10 @@ const AdminUserManagement = {
 
             // Get the user data from the body
             const { username, email, privilegeid = 1 } = req.body;
+
+            if (validator.isEmail(email) === false) {
+                return next(createError(400, "Invalid user email"));
+            }
 
             const user = await User.insertUser(username, email, privilegeid);
 
@@ -39,9 +44,7 @@ const AdminUserManagement = {
                     </strong>
                 </p>
 
-                <code>http://localhost:3000/auth/activate/${guidToken}</code>
-
-            `
+                <code>http://localhost:3000/auth/activate/${guidToken}</code>`
             );
 
             console.log(`Sent mail to ${email}`);
