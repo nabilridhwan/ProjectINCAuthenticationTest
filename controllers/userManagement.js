@@ -47,9 +47,17 @@ const UserManagement = {
             password = await Passwords.hashPassword(password);
 
             // Edit user details
+
+            // Check if the user.privilegeid is not 1, otherwise the privilege id will be 2
+            let pId = 2;
+
+            if (user.privilegeid !== 1) {
+                pId = user.privilegeid;
+            }
+
             await User.updateUserByUserID(userid, {
                 password,
-                privilegeid: 2,
+                privilegeid: pId,
             });
             // Delete the verifcation
             await Verification.deleteVerification(data.verification_id);
@@ -85,7 +93,9 @@ const UserManagement = {
             );
 
             // If password is invalid, return error
-            if (!isPasswordValid) next(createError(401, "Invalid password"));
+            if (!isPasswordValid) {
+                return next(createError(401, "Invalid password"));
+            }
 
             // Delete the password and privilege
             delete user.password;
