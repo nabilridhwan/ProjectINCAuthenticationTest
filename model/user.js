@@ -9,12 +9,12 @@ const prisma = new PrismaClient();
 
 const User = {
     insertUser: async (username, email, privilegeid = 1) => {
-        privilegeid = parseInt(privilegeid);
+        const intPrivilegeId = parseInt(privilegeid, 10);
         const data = await prisma.user.create({
             data: {
                 username,
                 email,
-                privilegeid,
+                privilegeid: intPrivilegeId,
             },
 
             select: {
