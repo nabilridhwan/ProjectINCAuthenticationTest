@@ -4,14 +4,16 @@
         "es2021": true,
         "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": ["airbnb-base"],
     "parserOptions": {
         "ecmaVersion": "latest"
     },
     "rules": {
-        "indent": ["error", 4],
-        "linebreak-style": ["error", "windows"],
         "quotes": ["error", "double"],
-        "semi": ["error", "always"]
+        "linebreak-style": "off",
+        "indent": ["error", 4, { "SwitchCase": 1 }],
+        "object-curly-newline": "off",
+        "max-len": "off",
+        "comma-dangle": "off"
     }
 }
