@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const { AdminAccount, VerifiedAccount } = require("./testAccounts");
+
 const prisma = new PrismaClient();
 
 (async () => {

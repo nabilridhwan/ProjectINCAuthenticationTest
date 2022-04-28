@@ -1,8 +1,9 @@
-const app = require("../app");
 const supertest = require("supertest");
-const request = supertest(app);
 const { faker } = require("@faker-js/faker");
 const { VerifiedAccount } = require("../utils/testAccounts");
+const app = require("../app");
+
+const request = supertest(app);
 
 describe("Auth Endpoint", () => {
     it("It should return a status code of 400 for missing parameters", async () => {

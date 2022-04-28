@@ -1,19 +1,20 @@
 // const { pool } = require("../utils/db");
 
 const { PrismaClient } = require("@prisma/client");
+
 const prisma = new PrismaClient();
 
 // const TABLE_NAME = "public.user";
 // const ACCESS_LEVEL_TABLE_NAME = "public.access_level";
 
 const User = {
-    insertUser: async (username, email, password, privilegeid) => {
+    insertUser: async (username, email, privilegeid = 1) => {
+        privilegeid = parseInt(privilegeid);
         const data = await prisma.user.create({
             data: {
-                username: username,
-                email: email,
-                password: password,
-                privilegeid: privilegeid,
+                username,
+                email,
+                privilegeid,
             },
 
             select: {
@@ -108,6 +109,7 @@ const User = {
 
         return data;
     },
+
     updateUserByUserID: async (inUserID, updatedFields) => {
         // Get user by email
         const getUser = await User.findUserByUserID(inUserID);
@@ -147,6 +149,20 @@ const User = {
         const data = await prisma.user.delete({
             where: {
                 email: inEmail,
+            },
+        });
+
+        return data;
+    },
+
+    getAllUsers: async () => {
+        const data = await prisma.user.findMany({
+            select: {
+                userid: true,
+                username: true,
+                email: true,
+                privilegeid: true,
+                privilege: true,
             },
         });
 
